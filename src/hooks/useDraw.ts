@@ -1,14 +1,14 @@
 /*
  * @Author: huwanfei
  * @Date: 2024-01-16 16:31:38
- * @LastEditTime: 2024-01-16 16:31:47
+ * @LastEditTime: 2024-01-17 10:24:12
  * @LastEditors: huwanfei
- * @Description:  
- * @FilePath: /vue3-autofit/src/hooks/scalingRatio.ts
+ * @Description:
+ * @FilePath: /vue3-autofit/src/hooks/useDraw.ts
  */
-import { ref } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 
-export default function useDraw() {
+export default function useDraw(designWidth: Number, designHeight: Number) {
   // 指向最外层容器
   const appRef = ref()
   // 定时函数
@@ -16,11 +16,11 @@ export default function useDraw() {
   // 默认缩放值
   const scale = {
     width: '1',
-    height: '1',
+    height: '1'
   }
   // 设计稿尺寸（px）
-  const baseWidth = 1920
-  const baseHeight = 1080
+  const baseWidth = +designWidth
+  const baseHeight = +designHeight
 
   // 需保持的比例
   const baseProportion = parseFloat((baseWidth / baseHeight).toFixed(5))
@@ -35,7 +35,7 @@ export default function useDraw() {
         appRef.value.style.transform = `scale(${scale.width}, ${scale.height}) translate(-50%, -50%)`
       } else {
         // 表示更高
-        scale.height = ((window.innerWidth / baseProportion) / baseHeight).toFixed(5)
+        scale.height = (window.innerWidth / baseProportion / baseHeight).toFixed(5)
         scale.width = (window.innerWidth / baseWidth).toFixed(5)
         appRef.value.style.transform = `scale(${scale.width}, ${scale.height}) translate(-50%, -50%)`
       }
@@ -59,10 +59,17 @@ export default function useDraw() {
     window.removeEventListener('resize', resize)
   }
 
+  // 生命周期
+  onMounted(() => {
+    windowDraw()
+    calcRate()
+  })
+
+  onUnmounted(() => {
+    unWindowDraw()
+  })
+
   return {
-    appRef,
-    calcRate,
-    windowDraw,
-    unWindowDraw
+    appRef
   }
 }

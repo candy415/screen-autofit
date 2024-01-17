@@ -1,44 +1,22 @@
 <!--
  * @Author: huwanfei
  * @Date: 2024-01-16 16:32:06
- * @LastEditTime: 2024-01-16 19:57:46
+ * @LastEditTime: 2024-01-17 10:26:12
  * @LastEditors: huwanfei
- * @Description:  
+ * @Description: ScreenFit组件示例
  * @FilePath: /vue3-autofit/src/views/demo.vue
 -->
 <template>
-  <div ref="appRef" id="index">
+  <ScreenFit>
     <HelloWorld msg="数据可视化全屏容器组件!" />
-  </div>
+  </ScreenFit>
 </template>
 
 <script setup lang="ts">
 import HelloWorld from '../components/HelloWorld.vue'
-import { onMounted, onUnmounted } from 'vue'
-// 引入封装好的方法
-import useDraw from '@/hooks/useDraw'
-// 适配处理
-const { appRef, calcRate, windowDraw, unWindowDraw } = useDraw()
-// 生命周期
-onMounted(() => {
-  windowDraw()
-  calcRate()
-})
+import ScreenFit from "../components/screenFit/index.vue";
 
-onUnmounted(() => {
-  unWindowDraw()
-})
 </script>
 
 <style scoped>
-#index {
-  /*根据设计稿的宽高进行修改*/
-  width: 1920px;
-  height: 1080px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  transform-origin: left top;
-}
 </style>
